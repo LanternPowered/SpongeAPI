@@ -36,14 +36,15 @@ import org.spongepowered.api.data.property.PropertyStore;
 import org.spongepowered.api.event.CauseStackManager;
 import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.network.ChannelRegistrar;
+import org.spongepowered.api.packs.ResourceManager;
 import org.spongepowered.api.plugin.PluginManager;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.service.ServiceManager;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.TeleportHelper;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
+import javax.annotation.Nullable;
 
 /**
  * A static all access class granting static access to various systems
@@ -62,6 +63,7 @@ public final class Sponge {
     @Inject private static PluginManager pluginManager;
     @Inject private static EventManager eventManager;
     @Inject private static AssetManager assetManager;
+    @Inject private static ResourceManager resourceManager;
     @Inject private static ConfigManager configManager;
     @Inject private static CommandManager commandManager;
     @Inject private static ServiceManager serviceManager;
@@ -152,8 +154,13 @@ public final class Sponge {
      *
      * @return The asset manager instance
      */
+    @Deprecated
     public static AssetManager getAssetManager() {
         return check(assetManager);
+    }
+
+    public static ResourceManager getResourceManager() {
+        return check(resourceManager);
     }
 
     /**
