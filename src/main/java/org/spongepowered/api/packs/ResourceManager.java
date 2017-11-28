@@ -66,11 +66,12 @@ public interface ResourceManager {
      * Gets a loaded resource at the given path, or {@link Optional#empty()}
      * if it does not exist.
      *
-     * <p>A path should be prefixed with a domain name. If one is not provided,
-     * {@code minecraft} will be used instead. For example, {@code minecraft:}</p>
+     * <p>A path should be prefixed with a namespace. If one is not provided,
+     * {@code minecraft} will be used instead. For example,
+     * {@code minecraft:advancements/adventure/trade.json}. A path must contain no special characters or uppercase letters.</p>
      *
      * <p>In the pack, the path will point to a resource. The resource should
-     * be located roughly at {@code /$assets/domain/$path}</p>
+     * be located roughly at {@code data/namespace/path}</p>
      *
      * TODO use CatalogKey (SpongeAPI#1655)
      *

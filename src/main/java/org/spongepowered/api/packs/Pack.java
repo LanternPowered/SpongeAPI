@@ -68,8 +68,9 @@ public interface Pack {
      * Gets a resource from this pack if it exists. No other packs will be
      * queried.
      *
-     * @param path The domain named path
+     * @param path The namespaced path
      * @return The resource
+     * @see ResourceManager#getResource(String)
      */
     Optional<Resource> getResource(String path);
 

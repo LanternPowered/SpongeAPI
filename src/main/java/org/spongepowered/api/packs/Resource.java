@@ -24,7 +24,6 @@
  */
 package org.spongepowered.api.packs;
 
-import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.data.DataView;
 
 import java.io.InputStream;
@@ -37,11 +36,10 @@ import java.util.Optional;
 public interface Resource {
 
     /**
-     * Gets the path of this resource. The path follows the same rules as a
-     * catalog identifier.
+     * Gets the path of this resource.
      *
      * @return The path
-     * @see CatalogType#getId()
+     * @see ResourceManager#getResource(String)
      */
     String getPath();
 
