@@ -22,11 +22,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.packs;
+package org.spongepowered.api.resources;
 
 import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.text.Text;
 
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -70,9 +71,9 @@ public interface Pack {
      *
      * @param path The namespaced path
      * @return The resource
-     * @see ResourceManager#getResource(String)
+     * @see ResourceManager#getResource(String, java.nio.file.Path)
      */
-    Optional<Resource> getResource(String path);
+    Optional<Resource> getResource(String namespace, Path path);
 
     /**
      * Called when the resource manager reloads. This should be used to clean

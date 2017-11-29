@@ -24,7 +24,7 @@
  */
 package org.spongepowered.api.asset;
 
-import org.spongepowered.api.packs.ResourceManager;
+import org.spongepowered.api.resources.ResourceManager;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 

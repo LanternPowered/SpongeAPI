@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.packs;
+package org.spongepowered.api.resources;
 
 import org.spongepowered.api.data.DataView;
 
@@ -39,9 +39,8 @@ public interface Resource {
      * Gets the path of this resource.
      *
      * @return The path
-     * @see ResourceManager#getResource(String)
      */
-    String getPath();
+    ResourcePath getResourcePath();
 
     /**
      * Gets the {@link Pack} which owns this resource.
@@ -63,7 +62,9 @@ public interface Resource {
      * @return The metadata or {@link Optional#empty() empty} if it doesn't exist.
      * @see <a href=http://minecraft.gamepedia.com/Resource_pack#Contents> Minecraft Wiki/Resource Packs
      */
-    Optional<DataView> getMetadata();
+    default Optional<DataView> getMetadata() {
+        return Optional.empty();
+    }
 
     /**
      * Returns a new {@link InputStream} of this resource.
