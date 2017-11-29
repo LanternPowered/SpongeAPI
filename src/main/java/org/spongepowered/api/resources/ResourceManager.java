@@ -46,9 +46,9 @@ public interface ResourceManager {
      * of the packs. Changes will take effect after {@link #reload()}
      * is called.</p>
      *
-     * <p><b>Note:</b> the default pack will always have the lowest priority.
-     * Afterwards are packs provided by plugins. They will be applied whether
-     * this list is empty or not.</p>
+     * <p><b>Note:</b> the vanilla pack will have the lowest priority by
+     * default. Afterwards are packs provided by plugins. These default
+     * provided packs can be individually disabled.</p>
      *
      * @return The list of active packs
      */

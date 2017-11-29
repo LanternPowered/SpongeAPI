@@ -27,7 +27,6 @@ package org.spongepowered.api.resources;
 import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.text.Text;
 
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -69,11 +68,11 @@ public interface Pack {
      * Gets a resource from this pack if it exists. No other packs will be
      * queried.
      *
-     * @param path The namespaced path
+     * @param path The path to the resource
      * @return The resource
-     * @see ResourceManager#getResource(String, java.nio.file.Path)
+     * @see ResourceManager#getResource(ResourcePath)
      */
-    Optional<Resource> getResource(String namespace, Path path);
+    Optional<Resource> getResource(ResourcePath path);
 
     /**
      * Called when the resource manager reloads. This should be used to clean
