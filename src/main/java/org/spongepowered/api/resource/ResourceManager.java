@@ -22,11 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.resources;
+package org.spongepowered.api.resource;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The resource manager is in charge of loading {@link Resource Resources} and
@@ -35,7 +34,7 @@ import java.util.Optional;
  * Packs are stacked on top of each other, so they will override and replace
  * resources in packs which are a lower priority.
  */
-public interface ResourceManager {
+public interface ResourceManager extends ResourceProvider {
 
     /**
      * Returns a mutable list of active packs. Active packs are loaded and
@@ -61,18 +60,6 @@ public interface ResourceManager {
      * @return A collection of available packs.
      */
     Collection<Pack> getAvailablePacks();
-
-    /**
-     * Gets a loaded resource at the given path, or {@link Optional#empty()}
-     * if it does not exist.
-     *
-     *
-     * TODO use CatalogKey (SpongeAPI#1655)
-     *
-     * @param path The path, including domain, to the resource
-     * @return The resource
-     */
-    Optional<Resource> getResource(ResourcePath path);
 
     /**
      * Reloads the resources from packs found in {@link #getActivePacks()}.

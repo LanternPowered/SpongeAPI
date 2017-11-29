@@ -22,18 +22,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.resources;
+package org.spongepowered.api.resource;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.util.ResettableBuilder;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * A pack can contain several {@link Resource Resources}.
  */
-public interface Pack {
+public interface Pack extends ResourceProvider {
+
+    /**
+     * Creates a new {@link Builder} instance.
+     *
+     * @return A new builder
+     */
+    static Builder builder() {
+        return Sponge.getRegistry().createBuilder(Builder.class);
+    }
 
     /**
      * Gets the name of this pack.
@@ -65,18 +77,60 @@ public interface Pack {
     Collection<Resource> getLoadedResources();
 
     /**
-     * Gets a resource from this pack if it exists. No other packs will be
-     * queried.
-     *
-     * @param path The path to the resource
-     * @return The resource
-     * @see ResourceManager#getResource(ResourcePath)
+     * A builder for a {@link Pack}.
      */
-    Optional<Resource> getResource(ResourcePath path);
+    interface Builder extends ResettableBuilder<Pack, Builder> {
 
-    /**
-     * Called when the resource manager reloads. This should be used to clean
-     * up any stray resources so a fresh start can be made.
-     */
-    void onReload();
+        /**
+         * Sets the name of this pack as it will appear in chat.
+         *
+         * @param text The name
+         * @return This builder
+         */
+        Builder name(Text text);
+
+        /**
+         * Sets the metadata for this pack.
+         *
+         * @param metadata The metadata
+         * @return This builder
+         */
+        Builder metadata(DataView metadata);
+
+        /**
+         * Allows resources to be generated dynamically as they are requested.
+         *
+         * @param provider The resource provider
+         * @return This builder
+         */
+        Builder provider(ResourceProvider provider);
+
+        /**
+         * Specifies a static {@link Resource} varargs to include in the
+         * {@link Pack}. Content is loaded along-with the pack. The resources
+         * themselves cannot be changed, but the contents are able to be
+         * reloaded.
+         *
+         * @param resources The resources
+         * @return This builder
+         */
+        Builder resources(Resource... resources);
+
+        /**
+         * Provides a {@link Resource} list to include in the pack. The
+         * resources are loaded when the pack is loaded. Resources can be added
+         * or removed as needed.
+         *
+         * @param resources
+         * @return This builder
+         */
+        Builder resources(Supplier<Iterable<Resource>> resources);
+
+        /**
+         * Creates a new instance of {@link Pack}.
+         *
+         * @return A new pack
+         */
+        Pack build();
+    }
 }

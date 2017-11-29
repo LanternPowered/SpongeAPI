@@ -36,7 +36,7 @@ import org.spongepowered.api.data.property.PropertyStore;
 import org.spongepowered.api.event.CauseStackManager;
 import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.network.ChannelRegistrar;
-import org.spongepowered.api.resources.ResourceManager;
+import org.spongepowered.api.resource.ResourceManager;
 import org.spongepowered.api.plugin.PluginManager;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.service.ServiceManager;
