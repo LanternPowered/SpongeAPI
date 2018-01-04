@@ -24,22 +24,27 @@
  */
 package org.spongepowered.api.resource;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 /**
- * Provides a new {@link InputStream} for a {@link Resource}.
+ * Annotation for injecting resources into a plugin instance.
+ *
+ * The type this should be used on is {@code Optional<Resource>}.
+ *
+ * @see ResourceManager#getResource(ResourcePath)
  */
-@FunctionalInterface
-public interface InputStreamSupplier {
+public @interface ResourceId {
 
     /**
-     * Returns a new {@link InputStream}. Each call of this method should
-     * create a new input stream.
+     * The namespace of the {@link Resource}. If not provided, it will default
+     * to the owner's plugin id.
      *
-     * @return A new input stream
-     * @throws IOException if an error occurs
+     * @see ResourcePath#getNamespace()
      */
-    InputStream openStream() throws IOException;
+    String namespace() default "";
 
+    /**
+     * The path to the {@link Resource}.
+     *
+     * @see ResourcePath#getPath()
+     */
+    String value();
 }

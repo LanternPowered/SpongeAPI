@@ -88,6 +88,9 @@ public interface ResourcePath extends Comparable<ResourcePath> {
      */
     String getPath();
 
+    @Override
+    int hashCode();
+
     /**
      * Represents a builder to create {@link ResourcePath} instances.
      */
@@ -101,6 +104,15 @@ public interface ResourcePath extends Comparable<ResourcePath> {
          * @throws IllegalArgumentException if the namespace contains illegal characters
          */
         Builder namespace(String namespace) throws IllegalArgumentException;
+
+        /**
+         * Sets the namespace of the {@link ResourcePath} using the given
+         * plugin's id.
+         *
+         * @param plugin The owning plugin
+         * @return This builder
+         */
+        Builder plugin(Object plugin);
 
         /**
          * Sets the path of the {@link ResourcePath}.

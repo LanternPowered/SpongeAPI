@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.asset.AssetManager;
+import org.spongepowered.api.resource.Pack;
+import org.spongepowered.api.resource.ResourceManager;
 import org.spongepowered.plugin.meta.PluginDependency;
 
 import java.nio.file.Path;
@@ -131,15 +133,26 @@ public interface PluginContainer {
      * @param name Name of asset
      * @return Asset if present, empty otherwise
      */
+    @Deprecated
     default Optional<Asset> getAsset(String name) {
         return Sponge.getAssetManager().getAsset(this, name);
+    }
+
+    /**
+     * Retrieves the {@link Pack} owned by this plugin from the
+     * {@link ResourceManager}.
+     *
+     * @return The plugin's resource pack.
+     */
+    default Optional<Pack> getPack() {
+        return Sponge.getResourceManager().getPack(this);
     }
 
     /**
      * Returns the source the plugin was loaded from.
      *
      * @return The source the plugin was loaded from or {@link Optional#empty()}
-     *     if unknown
+     * if unknown
      */
     default Optional<Path> getSource() {
         return Optional.empty();

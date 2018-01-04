@@ -24,8 +24,12 @@
  */
 package org.spongepowered.api.resource;
 
+import org.spongepowered.api.plugin.PluginContainer;
+
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The resource manager is in charge of loading {@link Resource Resources} and
@@ -37,32 +41,79 @@ import java.util.List;
 public interface ResourceManager extends ResourceProvider {
 
     /**
-     * Returns a mutable list of active packs. Active packs are loaded and
-     * determine which resources to use. The order of this list determines
-     * priority, which decides which resource {@link #getResource} will return.
+     * Gets the {@link Pack} defined from {@link PluginContainer#getSource()}.
+     * The name of the pack will contain the plugin id.
      *
-     * <p>Add, remove, and rearrange items in this list to change the priority
-     * of the packs. Changes will take effect after {@link #reload()}
-     * is called.</p>
+     * @param plugin The plugin instance or container.
+     * @return The pack
+     * @throws IllegalArgumentException if the object is not a plugin
+     */
+    Pack getPack(Object plugin);
+
+    /**
+     * Gets the pack by its name.
      *
-     * <p><b>Note:</b> the vanilla pack will have the lowest priority by
-     * default. Afterwards are packs provided by plugins. These default
-     * provided packs can be individually disabled.</p>
+     * @param name The pack's name.
+     * @return The pack or empty if it doesn't exist
+     */
+    Optional<Pack> getPack(String name);
+
+    /**
+     * Returns a list of currently active packs. The returned list is mutable,
+     * but changes will not be applied. To apply the changes, use
+     * {@link #reload(List)}.
      *
-     * @return The list of active packs
+     * @return The list of active packs.
      */
     List<Pack> getActivePacks();
 
     /**
-     * Returns a collection of available packs. An available pack is not
-     * currently loaded and must be made active in order to load resources.
+     * Returns a collection of available packs. An available pack could be
+     * active or not.
      *
      * @return A collection of available packs.
      */
-    Collection<Pack> getAvailablePacks();
+    Collection<Pack> getPacks();
 
     /**
-     * Reloads the resources from packs found in {@link #getActivePacks()}.
+     * Registers a pack to be usable.
+     *
+     * TODO move to {@link org.spongepowered.api.GameRegistry}?
+     *
+     * @param name
+     * @param pack
      */
-    void reload();
+    void registerPack(String name, Pack pack);
+
+    /**
+     * Unregisters a pack by its name.
+     *
+     * @param name The name of the pack
+     * @return The pack which was unregistered or empty if it wasn't registered
+     */
+    Optional<Pack> unregisterPack(String name);
+
+    /**
+     * Gets the resources at the given path from all active packs
+     *
+     * @param path The path of the resource.
+     * @return A collection of resources
+     */
+    Collection<Resource> getResources(ResourcePath path);
+
+    /**
+     * Schedules a reload of resources from active packs.
+     *
+     * @return A future for the task
+     */
+    CompletableFuture<Void> reload();
+
+    /**
+     * Schedules a reload of resources, using the packs from {@code packs}
+     *
+     * @param packs The packs to reload with
+     * @return A future for the task
+     */
+    CompletableFuture<Void> reload(List<Pack> packs);
+
 }

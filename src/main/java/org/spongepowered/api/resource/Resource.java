@@ -27,12 +27,11 @@ package org.spongepowered.api.resource;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.CharStreams;
 import com.google.common.io.MoreFiles;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.data.persistence.DataFormat;
 import org.spongepowered.api.data.persistence.InvalidDataFormatException;
-import org.spongepowered.api.util.ResettableBuilder;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,8 +40,7 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
+import java.util.stream.Stream;
 import javax.annotation.WillNotClose;
 
 /**
@@ -50,29 +48,7 @@ import javax.annotation.WillNotClose;
  * filesystem, a network location, or even generated at runtime. Use
  * {@link #openStream()} to load the data held by a resource.
  */
-public interface Resource extends InputStreamSupplier {
-
-    /**
-     * Creates a new builder for a {@link Resource}.
-     *
-     * @return A new builder
-     */
-    static Builder builder() {
-        return Sponge.getRegistry().createBuilder(Builder.class);
-    }
-
-    /**
-     * Creates a new resource for the given {@link ResourcePath} and
-     * {@link InputStream} supplier. The supplier should return a new
-     * input stream each time it is called.
-     *
-     * @param path The path of the resource
-     * @param stream Supplier for the input stream
-     * @return
-     */
-    static Resource of(ResourcePath path, InputStreamSupplier stream) {
-        return builder().path(path).stream(stream).build();
-    }
+public interface Resource extends ResourceData {
 
     /**
      * Gets the path of this resource.
@@ -88,32 +64,6 @@ public interface Resource extends InputStreamSupplier {
      * @return The parent pack.
      */
     Pack getPack();
-
-    /**
-     * Returns a new {@link InputStream} of this resource. A new input stream
-     * should be created each time this method is called.
-     *
-     * @return A new input stream
-     */
-    @Override
-    InputStream openStream() throws IOException;
-
-    /**
-     * Gets the metadata for this resource.
-     *
-     * <p>The metadata file has the same name as this resource, but has
-     * {@code .mcmeta} appended to the end.</p>
-     *
-     * <p>For example: the metadata for the resource
-     * {@code minecraft:textures/blocks/water_flow.png} would be located at
-     * {@code minecraft:textures/blocks/water_flow.png.mcmeta}</p>
-     *
-     * @return The metadata or {@link Optional#empty() empty} if it doesn't exist.
-     * @see <a href=http://minecraft.gamepedia.com/Resource_pack#Contents> Minecraft Wiki/Resource Packs
-     */
-    default Optional<DataView> getMetadata() throws IOException {
-        return Optional.empty();
-    }
 
     /**
      * Gets a reader for this resource using the given {@link Charset}.
@@ -146,9 +96,9 @@ public interface Resource extends InputStreamSupplier {
      * @return The list of strings
      * @throws IOException if an error occurs
      */
-    default List<String> readLines(Charset charset) throws IOException {
-        try (Reader r = getReader(charset)) {
-            return CharStreams.readLines(r);
+    default Stream<String> readLines(Charset charset) throws IOException {
+        try (BufferedReader r = new BufferedReader(getReader(charset))) {
+            return r.lines();
         }
     }
 
@@ -202,44 +152,6 @@ public interface Resource extends InputStreamSupplier {
         try (InputStream in = openStream()) {
             ByteStreams.copy(in, out);
         }
-    }
-
-    /**
-     * A builder for a {@link Resource}.
-     */
-    interface Builder extends ResettableBuilder<Resource, Builder> {
-
-        /**
-         * Sets the {@link ResourcePath} of the {@link Resource}.
-         *
-         * @param path The path
-         * @return This builder
-         */
-        Builder path(ResourcePath path);
-
-        /**
-         * Sets the {@link InputStreamSupplier} of the {@link Resource}.
-         *
-         * @param stream The inputstream supplier
-         * @return This builder
-         */
-        Builder stream(InputStreamSupplier stream);
-
-        /**
-         * Sets the metadata for the {@link Resource}.
-         *
-         * @param metadata The metadata
-         * @return This builder
-         */
-        Builder metadata(DataView metadata);
-
-        /**
-         * Creates a new {@link Resource}.
-         *
-         * @return A new resource
-         * @throws IllegalStateException if this builder is incomplete
-         */
-        Resource build() throws IllegalStateException;
     }
 
 }

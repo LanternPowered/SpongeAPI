@@ -22,32 +22,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.resource;
+package org.spongepowered.api.event.resource;
 
-import java.util.Collection;
-import java.util.Optional;
+import org.spongepowered.api.event.Event;
+import org.spongepowered.api.resource.ResourceManager;
 
-public interface ResourceProvider {
-
-    /**
-     * Gets a loaded resource at the given path, or {@link Optional#empty()}
-     * if it does not exist.
-     *
-     * @param path The path to the resource
-     * @return The resource
-     */
-    Optional<Resource> getResource(ResourcePath path);
+public interface ResourceEvent extends Event {
 
     /**
-     * Gets all the resources loaded from this pack. If the pack is not
-     * currently active, this list will be empty. Depending on the pack
-     * implementation, the contents of the collection may not reflect what the
-     * pack contains.
+     * Gets the {@link ResourceManager} which caused this event.
      *
-     * <p>If the pack is lazy-initialized, it is possible for the collection to
-     * be empty.</p>
-     *
-     * @return List of loaded resources
+     * @return The resource manager
      */
-    Collection<Resource> getAllResources();
+    ResourceManager getResourceManager();
+
 }

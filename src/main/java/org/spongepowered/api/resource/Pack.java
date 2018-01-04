@@ -29,8 +29,9 @@ import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.util.ResettableBuilder;
 
-import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -52,7 +53,7 @@ public interface Pack extends ResourceProvider {
      *
      * @return The name
      */
-    Text getName();
+    String getName();
 
     /**
      * Gets the metadata of this pack. The {@link DataView} represented is of
@@ -62,19 +63,6 @@ public interface Pack extends ResourceProvider {
      * @return The metadata if it exists
      */
     Optional<DataView> getMetadata();
-
-    /**
-     * Gets all the resources loaded from this pack. If the pack is not
-     * currently active, this list will be empty. Depending on the pack
-     * implementation, the contents of the collection may not reflect what the
-     * pack contains.
-     *
-     * <p>If the pack is lazy-initialized, it is possible for the collection to
-     * be empty.</p>
-     *
-     * @return List of loaded resources
-     */
-    Collection<Resource> getLoadedResources();
 
     /**
      * A builder for a {@link Pack}.
@@ -103,18 +91,26 @@ public interface Pack extends ResourceProvider {
          * @param provider The resource provider
          * @return This builder
          */
-        Builder provider(ResourceProvider provider);
+        Builder resources(Function<ResourcePath, ResourceData> provider);
 
         /**
-         * Specifies a static {@link Resource} varargs to include in the
-         * {@link Pack}. Content is loaded along-with the pack. The resources
-         * themselves cannot be changed, but the contents are able to be
-         * reloaded.
+         * Adds a static {@link Resource} resource to the {@link Pack}.
+         *
+         * @param path The path
+         * @param resource The data for the resource
+         * @return
+         */
+        Builder resource(ResourcePath path, ResourceData resource);
+
+        /**
+         * Specifies static {@link Resource}s to include in the {@link Pack}.
+         * Content is loaded along-with the pack. The resources themselves
+         * cannot be changed, but the contents are able to be reloaded.
          *
          * @param resources The resources
          * @return This builder
          */
-        Builder resources(Resource... resources);
+        Builder resources(Map<ResourcePath, ResourceData> resources);
 
         /**
          * Provides a {@link Resource} list to include in the pack. The
@@ -124,7 +120,7 @@ public interface Pack extends ResourceProvider {
          * @param resources
          * @return This builder
          */
-        Builder resources(Supplier<Iterable<Resource>> resources);
+        Builder resources(Supplier<Map<ResourcePath, ResourceData>> resources);
 
         /**
          * Creates a new instance of {@link Pack}.

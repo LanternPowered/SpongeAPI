@@ -24,30 +24,42 @@
  */
 package org.spongepowered.api.resource;
 
-import java.util.Collection;
+import org.spongepowered.api.data.DataView;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
-public interface ResourceProvider {
+/**
+ * Provides a new {@link InputStream} for a {@link Resource}.
+ */
+@FunctionalInterface
+public interface ResourceData {
 
     /**
-     * Gets a loaded resource at the given path, or {@link Optional#empty()}
-     * if it does not exist.
+     * Returns a new {@link InputStream} of this resource. A new input stream
+     * should be created each time this method is called.
      *
-     * @param path The path to the resource
-     * @return The resource
+     * @return A new input stream
+     * @throws IOException if an error occurs
      */
-    Optional<Resource> getResource(ResourcePath path);
+    InputStream openStream() throws IOException;
 
     /**
-     * Gets all the resources loaded from this pack. If the pack is not
-     * currently active, this list will be empty. Depending on the pack
-     * implementation, the contents of the collection may not reflect what the
-     * pack contains.
+     * Gets the metadata for this resource.
      *
-     * <p>If the pack is lazy-initialized, it is possible for the collection to
-     * be empty.</p>
+     * <p>The metadata file has the same name as this resource, but has
+     * {@code .mcmeta} appended to the end.</p>
      *
-     * @return List of loaded resources
+     * <p>For example: the metadata for the resource
+     * {@code minecraft:textures/blocks/water_flow.png} would be located at
+     * {@code minecraft:textures/blocks/water_flow.png.mcmeta}</p>
+     *
+     * @return The metadata or {@link Optional#empty() empty} if it doesn't exist.
+     * @throws IOException if the metadata file is corrupt or cannot be read.
+     * @see <a href=http://minecraft.gamepedia.com/Resource_pack#Contents> Minecraft Wiki/Resource Packs
      */
-    Collection<Resource> getAllResources();
+    default Optional<DataView> getMetadata() throws IOException {
+        return Optional.empty();
+    }
 }
