@@ -29,9 +29,9 @@ import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.util.ResettableBuilder;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -49,11 +49,11 @@ public interface Pack extends ResourceProvider {
     }
 
     /**
-     * Gets the name of this pack.
+     * Gets the name of this pack which is displayed to the user.
      *
      * @return The name
      */
-    String getName();
+    Text getName();
 
     /**
      * Gets the metadata of this pack. The {@link DataView} represented is of
@@ -65,6 +65,19 @@ public interface Pack extends ResourceProvider {
     Optional<DataView> getMetadata();
 
     /**
+     * Gets all the resources loaded from this pack. If the pack is not
+     * currently active, this list will be empty. Depending on the pack
+     * implementation, the contents of the collection may not reflect what the
+     * pack contains.
+     *
+     * <p>If the pack is lazy-initialized, it is possible for the collection to
+     * be empty.</p>
+     *
+     * @return List of loaded resources
+     */
+    Collection<Resource> getAllResources();
+
+    /**
      * A builder for a {@link Pack}.
      */
     interface Builder extends ResettableBuilder<Pack, Builder> {
@@ -72,10 +85,10 @@ public interface Pack extends ResourceProvider {
         /**
          * Sets the name of this pack as it will appear in chat.
          *
-         * @param text The name
+         * @param name The name
          * @return This builder
          */
-        Builder name(Text text);
+        Builder name(Text name);
 
         /**
          * Sets the metadata for this pack.
@@ -91,14 +104,14 @@ public interface Pack extends ResourceProvider {
          * @param provider The resource provider
          * @return This builder
          */
-        Builder resources(Function<ResourcePath, ResourceData> provider);
+        Builder resources(ResourceProvider provider);
 
         /**
          * Adds a static {@link Resource} resource to the {@link Pack}.
          *
          * @param path The path
          * @param resource The data for the resource
-         * @return
+         * @return This builder
          */
         Builder resource(ResourcePath path, ResourceData resource);
 
@@ -117,7 +130,7 @@ public interface Pack extends ResourceProvider {
          * resources are loaded when the pack is loaded. Resources can be added
          * or removed as needed.
          *
-         * @param resources
+         * @param resources The resources to load
          * @return This builder
          */
         Builder resources(Supplier<Map<ResourcePath, ResourceData>> resources);

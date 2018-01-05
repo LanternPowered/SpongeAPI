@@ -38,7 +38,7 @@ import java.util.concurrent.CompletableFuture;
  * Packs are stacked on top of each other, so they will override and replace
  * resources in packs which are a lower priority.
  */
-public interface ResourceManager extends ResourceProvider {
+public interface ResourceManager extends ResourceProvider, PackProvider {
 
     /**
      * Gets the {@link Pack} defined from {@link PluginContainer#getSource()}.
@@ -68,30 +68,20 @@ public interface ResourceManager extends ResourceProvider {
     List<Pack> getActivePacks();
 
     /**
-     * Returns a collection of available packs. An available pack could be
-     * active or not.
-     *
-     * @return A collection of available packs.
-     */
-    Collection<Pack> getPacks();
-
-    /**
      * Registers a pack to be usable.
      *
-     * TODO move to {@link org.spongepowered.api.GameRegistry}?
-     *
-     * @param name
-     * @param pack
+     * @param packId The id of the pack
+     * @param pack The pack to register
      */
-    void registerPack(String name, Pack pack);
+    void registerPack(String packId, Pack pack);
 
     /**
      * Unregisters a pack by its name.
      *
-     * @param name The name of the pack
+     * @param packId The id of the pack
      * @return The pack which was unregistered or empty if it wasn't registered
      */
-    Optional<Pack> unregisterPack(String name);
+    Optional<Pack> unregisterPack(String packId);
 
     /**
      * Gets the resources at the given path from all active packs

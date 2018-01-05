@@ -22,20 +22,4 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.resource;
-
-import java.util.Optional;
-
-@FunctionalInterface
-public interface ResourceProvider {
-
-    /**
-     * Gets a loaded resource at the given path, or {@link Optional#empty()}
-     * if it does not exist.
-     *
-     * @param path The path to the resource
-     * @return The resource
-     */
-    Optional<Resource> getResource(ResourcePath path);
-
-}
+@org.spongepowered.api.util.annotation.NonnullByDefault package org.spongepowered.api.resource;

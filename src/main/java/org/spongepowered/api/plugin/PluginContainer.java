@@ -144,7 +144,7 @@ public interface PluginContainer {
      *
      * @return The plugin's resource pack.
      */
-    default Optional<Pack> getPack() {
+    default Pack getPack() {
         return Sponge.getResourceManager().getPack(this);
     }
 

@@ -27,14 +27,18 @@ package org.spongepowered.api.resource;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.util.ResettableBuilder;
 
+import java.util.Map;
+
 /**
  * <p>A resource path should contain a namespace. If one is not provided,
  * {@code minecraft} will be used instead. The namespace and path must not
- * contain any special characters or uppercase letters. For example,
- * {@code lagmeter:functions/lm.json}.</p>
+ * contain any special characters or uppercase letters.
  *
  * <p>In the pack, the path will point to a resource. The resource should
  * be located roughly at {@code data/namespace/path}</p>
+ *
+ * <p>A resource path should be usable in a {@link Map}, so implementations
+ * should override {@link #hashCode()} and {@link #equals(Object)}.</p>
  */
 public interface ResourcePath extends Comparable<ResourcePath> {
 
@@ -68,7 +72,7 @@ public interface ResourcePath extends Comparable<ResourcePath> {
      * functions/lm.json file in the lagmeter namespace.</p>
      *
      * @param path The path
-     * @return
+     * @return A new ResourcePath
      */
     static ResourcePath parse(String path) throws IllegalArgumentException {
         return builder().parse(path).build();
@@ -87,9 +91,6 @@ public interface ResourcePath extends Comparable<ResourcePath> {
      * @return The path
      */
     String getPath();
-
-    @Override
-    int hashCode();
 
     /**
      * Represents a builder to create {@link ResourcePath} instances.
